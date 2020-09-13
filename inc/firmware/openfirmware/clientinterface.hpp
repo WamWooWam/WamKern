@@ -2,17 +2,30 @@
 
 // based on ci.h from BootX
 namespace WamKern::Firmware::OpenFirmware {
-    typedef long Cell;
+typedef long Cell;
 
 class ClientInterface {
    public:
-
     static constexpr Cell kCINoError = (0);
     static constexpr Cell kCIError = (-1);
     static constexpr Cell kCICatch = (-2);
 
     struct Args {
-        char *service;
+        inline Args() {
+            this->service = nullptr;
+            this->nArgs = 0;
+            this->nReturns = 0;
+            // this->args = {}; needs memcpy
+        }
+
+        inline Args(const char *service, Cell nArgs = 0, Cell nReturns = 0) {
+            this->service = service;
+            this->nArgs = nArgs;
+            this->nReturns = nReturns;
+            // this->args = {}; needs memcpy
+        }
+
+        const char *service;
         Cell nArgs;
         Cell nReturns;
 
@@ -28,9 +41,9 @@ class ClientInterface {
                 Cell cells[6 + 1 + 6];
             } callMethod;
 
-            struct {            // nArgs=1, nReturns=1	( device-specifier -- ihandle )
-                char *devSpec;  // IN parameter
-                Cell ihandle;   // RETURN value
+            struct {                  // nArgs=1, nReturns=1	( device-specifier -- ihandle )
+                const char *devSpec;  // IN parameter
+                Cell ihandle;         // RETURN value
             } open;
 
             struct {           // nArgs=1, nReturns=0	( ihandle -- )
@@ -141,30 +154,32 @@ class ClientInterface {
             struct {  // nArgs=1, nReturns=0
                 char *bootspec;
             } boot;
-        } args;
+        } data;
     };
 
     typedef long (*Delegate)(Args *args);
 
-    static void Init(void *interface);
-    static long Call(Args *ciArgs);
+    ClientInterface() = default;
+    ClientInterface(void *interface);
+    
+    long Call(Args *ciArgs);
 
-    static Cell Peer(Cell phandle);
+    Cell Peer(Cell phandle);
     // static Cell Child(Cell phandle);
     // static Cell Parent(Cell phandle);
-    static Cell FindDevice(char *devSpec);
+    Cell FindDevice(char *devSpec);
 
-    static Cell GetProp(Cell handle, char* name, char* buff, long buflen);
-    static Cell InstanceToPackage(Cell iHandle);
+    Cell GetProp(Cell handle, char *name, char *buff, long buflen);
+    Cell InstanceToPackage(Cell iHandle);
 
-    static Cell Write(Cell ihandle, void* addr, long length);
+    Cell Write(Cell ihandle, void *addr, long length);
 
     // static void Enter();
-    [[noreturn]] static void Exit();
+    [[noreturn]] void Exit();
     // static void Quiesce();
 
    private:
-    static Delegate delegate;
+    Delegate delegate = nullptr;
 };
 
 }  // namespace WamKern::Firmware::OpenFirmware
