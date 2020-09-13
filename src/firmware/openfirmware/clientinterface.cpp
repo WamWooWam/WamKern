@@ -22,7 +22,7 @@ Cell ClientInterface::Peer(Cell phandle) {
     return args.data.peer.peerPhandle;
 }
 
-Cell ClientInterface::FindDevice(char* devSpec) {
+Cell ClientInterface::FindDevice(const char* devSpec) {
     Args args{"finddevice", 1, 1};
     args.data.finddevice.devSpec = devSpec;
 
@@ -31,10 +31,10 @@ Cell ClientInterface::FindDevice(char* devSpec) {
     return args.data.finddevice.phandle;
 }
 
-Cell ClientInterface::GetProp(Cell phandle, char* name, char* buff, long buflen) {
+Cell ClientInterface::GetProp(Cell phandle, const char* name, char* buff, long buflen) {
     Args args{"getprop", 4, 1};
     args.data.getprop.phandle = phandle;
-    args.data.getprop.name = name;
+    args.data.getprop.name = (char*)name;
     args.data.getprop.buf = buff;
     args.data.getprop.buflen = buflen;
 

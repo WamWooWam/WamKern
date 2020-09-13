@@ -7,3 +7,8 @@ void *memset(void *mem, int character, long count) {
 
     return mem;
 }
+
+// error handler for if pure virtual functions somehow get called directiy
+void __cxa_pure_virtual () {
+    // TODO: explode
+}

@@ -99,7 +99,7 @@ class ClientInterface {
             } parent;
 
             struct {            // nArgs=1, nReturns=1	( devSpec -- phandle )
-                char *devSpec;  // IN parameter
+                const char *devSpec;  // IN parameter
                 Cell phandle;   // RETURN value
             } finddevice;
 
@@ -161,15 +161,15 @@ class ClientInterface {
 
     ClientInterface() = default;
     ClientInterface(void *interface);
-    
+
     long Call(Args *ciArgs);
 
     Cell Peer(Cell phandle);
     // static Cell Child(Cell phandle);
     // static Cell Parent(Cell phandle);
-    Cell FindDevice(char *devSpec);
+    Cell FindDevice(const char *devSpec);
 
-    Cell GetProp(Cell handle, char *name, char *buff, long buflen);
+    Cell GetProp(Cell handle, const char *name, char *buff, long buflen);
     Cell InstanceToPackage(Cell iHandle);
 
     Cell Write(Cell ihandle, void *addr, long length);

@@ -10,6 +10,7 @@ char Kernel::StackBase[0x8000];
 [[noreturn]] void Kernel::InitKernel(void* data) {
     static const char message[15] = "Hello, world!\n";
     OpenFirmwarePlatform platform{data};
-    
+    platform.WriteToConsole(message, 15);
+    platform.Exit();
 }
 }  // namespace WamKern
