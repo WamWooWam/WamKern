@@ -15,9 +15,8 @@ class OpenFirmwarePlatform : public BasePlatform {
 
    private:
     ClientInterface _clientInterface;
-    Cell _chosenEH = 0;
+    Cell _chosenPH = 0;
     Cell _stdoutIH = 0;
-
-    void InitConsole();
+    Cell _stdinIH = 0;
 };
 }  // namespace WamKern::Platform

@@ -3,19 +3,17 @@
 namespace WamKern::Platform {
 OpenFirmwarePlatform::OpenFirmwarePlatform(void* clientInterfacePtr) {
     _clientInterface = ClientInterface(clientInterfacePtr);
-    _chosenEH = _clientInterface.FindDevice("/chosen");
+
+    // aquire the /chosen device
+    _chosenPH = _clientInterface.FindDevice("/chosen");
+
+    // get stdout/stdin from it
+    _clientInterface.GetProp(_chosenPH, "stdout", (char*)&_stdoutIH, sizeof _stdoutIH);
+    _clientInterface.GetProp(_chosenPH, "stdin", (char*)&_stdinIH, sizeof _stdinIH);
 }
 
 void OpenFirmwarePlatform::WriteToConsole(const char* text, long length) {
-    InitConsole();
-
     _clientInterface.Write(_stdoutIH, (void*)text, length);
-}
-
-void OpenFirmwarePlatform::InitConsole() {
-    if (_stdoutIH == 0) {
-        _clientInterface.GetProp(_chosenEH, "stdout", (char*)&_stdoutIH, sizeof _stdoutIH);
-    }
 }
 
 [[noreturn]] void OpenFirmwarePlatform::Exit() {
