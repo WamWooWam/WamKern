@@ -2,10 +2,6 @@
 
 extern unsigned long end;
 
-void InitAlloc() {
-    currentPtr = &end;
-}
-
 void* operator new(size_t count) {
     return malloc(count);
 }
@@ -48,6 +44,10 @@ void* memmove(void* dest, const void* src, size_t count) {
 }
 
 void* sbrk(size_t inc) {
+    if (currentPtr == nullptr) {
+        currentPtr = &end;
+    }
+
     return (void*)(currentPtr + inc);
 }
 }

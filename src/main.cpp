@@ -9,7 +9,6 @@ int main(void *, void *, void *ofInterface) {
                      :
                      : "r"(stackPtr));  // fix the stack pointer to something reasonable
 
-    InitAlloc();
     Kernel::Run(ofInterface);
 }
 }

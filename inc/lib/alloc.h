@@ -10,7 +10,6 @@ void* operator new(size_t count);
 void* operator new[](size_t count);
 void operator delete(void* ptr);
 void operator delete[](void* ptr); 
-void InitAlloc();
 
 extern "C" {
 #endif
