@@ -1,9 +1,8 @@
 #include "firmware/openfirmware/clientinterface.hpp"
 
-#define CLEAN_CALL(args) if (Call(args) != 0) return kCIError
 
 namespace WamKern::Firmware::OpenFirmware {
-//ClientInterface::Delegate ClientInterface::delegate = nullptr;
+#define CLEAN_CALL(args) if (Call(args) != 0) return Error
 
 ClientInterface::ClientInterface(void* interface) {
     delegate = reinterpret_cast<Delegate>(interface);
@@ -22,6 +21,24 @@ Cell ClientInterface::Peer(Cell phandle) {
     return args.data.peer.peerPhandle;
 }
 
+Cell ClientInterface::Child(Cell phandle) {
+    Args args{"child", 1, 1};
+    args.data.child.phandle = phandle;
+
+    CLEAN_CALL(&args);
+
+    return args.data.child.childPhandle;
+}
+
+Cell ClientInterface::Parent(Cell phandle) {
+    Args args{"parent", 1, 1};
+    args.data.parent.childPhandle = phandle;
+
+    CLEAN_CALL(&args);
+
+    return args.data.parent.parentPhandle;
+}
+
 Cell ClientInterface::FindDevice(const char* devSpec) {
     Args args{"finddevice", 1, 1};
     args.data.finddevice.devSpec = devSpec;
@@ -31,11 +48,11 @@ Cell ClientInterface::FindDevice(const char* devSpec) {
     return args.data.finddevice.phandle;
 }
 
-Cell ClientInterface::GetProp(Cell phandle, const char* name, char* buff, long buflen) {
+Cell ClientInterface::GetProp(Cell phandle, const char* name, void* buff, long buflen) {
     Args args{"getprop", 4, 1};
     args.data.getprop.phandle = phandle;
     args.data.getprop.name = (char*)name;
-    args.data.getprop.buf = buff;
+    args.data.getprop.buf = (char*)buff;
     args.data.getprop.buflen = buflen;
 
     CLEAN_CALL(&args);

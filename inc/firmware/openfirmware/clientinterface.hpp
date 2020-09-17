@@ -6,23 +6,23 @@ typedef long Cell;
 
 class ClientInterface {
    public:
-    static constexpr Cell kCINoError = (0);
-    static constexpr Cell kCIError = (-1);
-    static constexpr Cell kCICatch = (-2);
+    static constexpr Cell NoError = (0);
+    static constexpr Cell Error = (-1);
+    static constexpr Cell Catch = (-2);
 
     struct Args {
         inline Args() {
             this->service = nullptr;
             this->nArgs = 0;
             this->nReturns = 0;
-            // this->args = {}; needs memcpy
+            this->data = {};
         }
 
         inline Args(const char *service, Cell nArgs = 0, Cell nReturns = 0) {
             this->service = service;
             this->nArgs = nArgs;
             this->nReturns = nReturns;
-            // this->args = {}; needs memcpy
+            this->data = {};
         }
 
         const char *service;
@@ -159,17 +159,21 @@ class ClientInterface {
 
     typedef long (*Delegate)(Args *args);
 
+    static inline bool IsValidHandle(Cell x) {
+        return x != 0 && x != Error;
+    }
+
     ClientInterface() = default;
     ClientInterface(void *interface);
 
     long Call(Args *ciArgs);
 
     Cell Peer(Cell phandle);
-    // static Cell Child(Cell phandle);
-    // static Cell Parent(Cell phandle);
+    Cell Child(Cell phandle);
+    Cell Parent(Cell phandle);
     Cell FindDevice(const char *devSpec);
 
-    Cell GetProp(Cell handle, const char *name, char *buff, long buflen);
+    Cell GetProp(Cell handle, const char *name, void *buff, long buflen);
     Cell InstanceToPackage(Cell iHandle);
 
     Cell Write(Cell ihandle, void *addr, long length);
