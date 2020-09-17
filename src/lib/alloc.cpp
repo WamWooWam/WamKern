@@ -48,6 +48,9 @@ void* sbrk(size_t inc) {
         currentPtr = &end;
     }
 
-    return (void*)(currentPtr + inc);
+    void* ptr = currentPtr;
+    currentPtr += inc;
+
+    return ptr;
 }
 }
