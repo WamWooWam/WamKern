@@ -23,7 +23,7 @@ OpenFirmwarePlatform::OpenFirmwarePlatform(void* clientInterfacePtr) {
 }
 
 void OpenFirmwarePlatform::WriteToConsole(const char* text) {
-    if (_stdoutIH)
+    if (ClientInterface::IsValidHandle(_stdoutIH))
         _clientInterface.Write(_stdoutIH, (void*)text, String::Length(text));
 }
 

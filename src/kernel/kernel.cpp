@@ -1,5 +1,8 @@
 #include "kernel/kernel.hpp"
 
+#include <stdint.h>
+
+#include "lib/alloc.h"
 #include "platform/openfirmware.hpp"
 
 using namespace WamKern::Platform;
@@ -9,8 +12,10 @@ char Kernel::StackBase[0x8000];
 Platform::BasePlatform* Kernel::_platform;
 
 [[noreturn]] void Kernel::Run(void* data) {
-    _platform = new OpenFirmwarePlatform(data);
-    _platform->WriteToConsole("Hello, world!\r\n");
+    const char testString[16] = "Hello, world!\r\n";
+
+    _platform = new OpenFirmwarePlatform{data};
+    _platform->WriteToConsole(testString);
     _platform->Exit();
 }
 
@@ -20,7 +25,7 @@ Platform::BasePlatform* Kernel::_platform;
     }
 
     for (;;)
-        ; // halt
+        ;  // halt
 }
 
 }  // namespace WamKern
