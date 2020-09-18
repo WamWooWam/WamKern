@@ -48,6 +48,32 @@ void Memory::Free(void* ptr) {
 #endif
 }
 
+template <typename T>
+T* Memory::Set(T* dest, T c, size_t count) {
+    for (size_t i = 0; i < count; i++) {
+        ((T*)dest)[i] = c;
+    }
+
+    return dest;
+}
+template <typename T>
+T* Memory::Copy(const T* src, T* dest, size_t count) {
+    for (size_t i = 0; i < count; i++) {
+        dest[i] = src[i];
+    }
+
+    return dest;
+}
+
+template <typename T>
+T* Memory::Move(const T* src, T* dest, size_t count) {
+    for (size_t i = 0; i < count; i++) {
+        size_t j = dest < src ? i : count - 1 - i;
+        dest[j] = src[j];
+    }
+    return dest;
+}
+
 void* operator new(size_t count) {
     return (void*)Memory::Allocate<uint8_t>(count);
 }
@@ -66,27 +92,15 @@ void operator delete[](void* ptr) {
 
 extern "C" {
 void* memset(void* mem, int32_t c, size_t count) {
-    for (size_t i = 0; i < count; i++) {
-        ((uint8_t*)mem)[i] = (uint8_t)c;
-    }
-
-    return mem;
+    return Memory::Set((uint8_t*)mem, (uint8_t)c, count);
 }
 
 void* memcpy(void* dest, const void* src, size_t count) {
-    for (size_t i = 0; i < count; i++) {
-        ((uint8_t*)dest)[i] = ((const uint8_t*)src)[i];
-    }
-
-    return dest;
+    return Memory::Copy((const uint8_t*)src, (uint8_t*)dest, count);
 }
 
 void* memmove(void* dest, const void* src, size_t count) {
-    for (size_t i = 0; i < count; i++) {
-        size_t j = dest < src ? i : count - 1 - i;
-        ((uint8_t*)dest)[j] = ((const uint8_t*)src)[j];
-    }
-    return dest;
+    return Memory::Move((const uint8_t*)src, (uint8_t*)dest, count);
 }
 
 void* sbrk(size_t inc) {

@@ -14,6 +14,15 @@ class Memory {
     template <typename T>
     static T* Allocate(size_t count);
     static void Free(void* ptr);
+    
+    template <typename T>
+    static T* Set(T* dest, T c, size_t count);
+
+    template <typename T>
+    static T* Copy(const T* src, T* dest, size_t count);
+
+    template <typename T>
+    static T* Move(const T* src, T* dest, size_t count);
 
    private:
     static const void* baseAddress;

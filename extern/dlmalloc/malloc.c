@@ -482,8 +482,9 @@ extern "C" {
   of a program, using your regular system malloc elsewhere.
 */
 
+#ifdef TEST
 #define USE_DL_PREFIX
-
+#endif
 
 /*
   USE_MALLOC_LOCK causes wrapper functions to surround each
