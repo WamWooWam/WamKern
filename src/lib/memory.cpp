@@ -2,6 +2,7 @@
 
 #include "kernel/kernel.hpp"
 
+namespace WamKern {
 const void* Memory::baseAddress = nullptr;
 void* Memory::currentPtr = nullptr;
 ptrdiff_t Memory::maxSize = 0;
@@ -9,17 +10,16 @@ ptrdiff_t Memory::maxSize = 0;
 void Memory::Init(const void* baseAddress, ptrdiff_t maxSize) {
     Memory::baseAddress = baseAddress;
     Memory::maxSize = maxSize;
-
     Memory::currentPtr = (void*)baseAddress;
 }
 
 void* Memory::Increment(size_t inc) {
     if (currentPtr == nullptr) {
-        WamKern::Kernel::Panic("Memory not initialised!!");
+        Kernel::Panic("Memory not initialised!!");
     }
 
     if (((ptrdiff_t)currentPtr + inc) - (ptrdiff_t)baseAddress > maxSize) {
-        WamKern::Kernel::Panic("Requested more memory than available!");
+        Kernel::Panic("Requested more memory than available!");
     }
 
     void* ptr = currentPtr;
@@ -32,15 +32,19 @@ const void* Memory::GetBaseAddress() noexcept {
 }
 
 template <typename T>
-T* Memory::Allocate(size_t count) {
+T* Memory::Allocate(size_t count, bool clear) {
+    KernelLogF("Allocating %d bytes", count * sizeof(T));
+
 #ifdef TEST
-    return (T*)dlmalloc(count * sizeof(T));
+    return clear ? (T*)dlcalloc(count, sizeof(T)) : (T*)dlmalloc(count * sizeof(T));
 #else
-    return (T*)malloc(count * sizeof(T));
+    return clear ? (T*)calloc(count, sizeof(T)) : (T*)malloc(count * sizeof(T));
 #endif
 }
 
 void Memory::Free(void* ptr) {
+    KernelLogF("Freeing ptr 0x%x", ptr);
+
 #ifdef TEST
     return dlfree(ptr);
 #else
@@ -73,37 +77,38 @@ T* Memory::Move(const T* src, T* dest, size_t count) {
     }
     return dest;
 }
+}  // namespace WamKern
 
 void* operator new(size_t count) {
-    return (void*)Memory::Allocate<uint8_t>(count);
+    return (void*)WamKern::Memory::Allocate<uint8_t>(count);
 }
 
 void* operator new[](size_t count) {
-    return (void*)Memory::Allocate<uint8_t>(count);
+    return (void*)WamKern::Memory::Allocate<uint8_t>(count);
 }
 
 void operator delete(void* ptr) {
-    Memory::Free(ptr);
+    WamKern::Memory::Free(ptr);
 }
 
 void operator delete[](void* ptr) {
-    Memory::Free(ptr);
+    WamKern::Memory::Free(ptr);
 }
 
 extern "C" {
 void* memset(void* mem, int32_t c, size_t count) {
-    return Memory::Set((uint8_t*)mem, (uint8_t)c, count);
+    return WamKern::Memory::Set((uint8_t*)mem, (uint8_t)c, count);
 }
 
 void* memcpy(void* dest, const void* src, size_t count) {
-    return Memory::Copy((const uint8_t*)src, (uint8_t*)dest, count);
+    return WamKern::Memory::Copy((const uint8_t*)src, (uint8_t*)dest, count);
 }
 
 void* memmove(void* dest, const void* src, size_t count) {
-    return Memory::Move((const uint8_t*)src, (uint8_t*)dest, count);
+    return WamKern::Memory::Move((const uint8_t*)src, (uint8_t*)dest, count);
 }
 
 void* sbrk(size_t inc) {
-    return Memory::Increment(inc);
+    return WamKern::Memory::Increment(inc);
 }
 }
