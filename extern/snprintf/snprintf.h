@@ -12,6 +12,10 @@
 extern "C" {
 #endif
 
+#ifdef TEST
+#define malloc dlmalloc
+#endif
+
 int rpl_vsnprintf(char *, size_t, const char *, va_list);
 int rpl_snprintf(char *, size_t, const char *, ...);
 int rpl_vasprintf(char **, const char *, va_list);

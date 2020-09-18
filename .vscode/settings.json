@@ -1,5 +1,10 @@
 {
     "files.associations": {
-        "string_view": "cpp"
+        "string_view": "cpp",
+        "*.tcc": "cpp",
+        "type_traits": "cpp",
+        "istream": "cpp",
+        "ostream": "cpp",
+        "tuple": "cpp"
     }
 }

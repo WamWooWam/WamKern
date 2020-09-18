@@ -3,7 +3,8 @@
 
 #include "platform/baseplatform.hpp"
 
-#define KernelLog(format, ...) WamKern::Kernel::Log(__BASE_FILE__, __func__, __LINE__, format, __VA_ARGS__)
+#define KernelLog(format) WamKern::Kernel::Log(__BASE_FILE__, __func__, __LINE__, format)
+#define KernelLogF(format, ...) WamKern::Kernel::Log(__BASE_FILE__, __func__, __LINE__, format, __VA_ARGS__)
 
 namespace WamKern {
 class Kernel {

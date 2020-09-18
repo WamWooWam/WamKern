@@ -1,5 +1,7 @@
 
 #include "platform/openfirmware.hpp"
+
+#include "lib/memory.h"
 #include "lib/string.h"
 
 namespace WamKern::Platform {
@@ -20,6 +22,18 @@ OpenFirmwarePlatform::OpenFirmwarePlatform(void* clientInterfacePtr) {
     _clientInterface.GetProp(_chosenPH, "mmu", (char*)&_mmuIH, sizeof _mmuIH);
     if (!ClientInterface::IsValidHandle(_mmuIH))
         Panic("Unable to aquire mmu instance handle!");
+
+    _clientInterface.Claim((Cell)_mallocAddress, _mallocSize, 0);
+    Memory::Init(_mallocAddress, _mallocSize);
+}
+
+OpenFirmwarePlatform::OpenFirmwarePlatform(const OpenFirmwarePlatform&& p) {
+    _clientInterface = p._clientInterface;
+    _chosenPH = p._chosenPH;
+    _stdoutIH = p._stdoutIH;
+    _stdinIH = p._stdinIH;
+    _memIH = p._memIH;
+    _mmuIH = p._mmuIH;
 }
 
 void OpenFirmwarePlatform::WriteToConsole(const char* text) {

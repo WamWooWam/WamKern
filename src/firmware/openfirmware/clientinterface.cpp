@@ -80,6 +80,17 @@ Cell ClientInterface::Write(Cell ihandle, void* addr, long length) {
     return args.data.write.actual;
 }
 
+Cell ClientInterface::Claim(Cell virtualAddress, Cell size, Cell alignment) {
+    Args args{"claim", 3, 1};
+    args.data.claim.virt = virtualAddress;
+    args.data.claim.size = size;
+    args.data.claim.align = alignment;
+
+    CLEAN_CALL(&args);
+
+    return args.data.claim.baseaddr;
+}
+
 [[noreturn]] void ClientInterface::Exit() {
     Args args{"exit"};
     Call(&args);

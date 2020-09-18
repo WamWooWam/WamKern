@@ -22,6 +22,12 @@
     declarations should be compatible with system versions
 */
 
+#ifdef TEST
+#define USE_DL_PREFIX
+#endif
+
+#define _ALLOCA_H 
+
 #ifndef MALLOC_270_H
 #define MALLOC_270_H
 

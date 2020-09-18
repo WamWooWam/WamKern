@@ -9,6 +9,7 @@ class OpenFirmwarePlatform : public BasePlatform {
    public:
     OpenFirmwarePlatform(void* clientInterfacePtr);
     OpenFirmwarePlatform(const OpenFirmwarePlatform&) = delete;
+    OpenFirmwarePlatform(const OpenFirmwarePlatform&&);
 
     void WriteToConsole(const char* text);
     void WriteToConsole(const char* text, size_t length);
@@ -31,5 +32,8 @@ class OpenFirmwarePlatform : public BasePlatform {
     Cell _memIH = 0;
     // mmu instance handle
     Cell _mmuIH = 0;
+
+    const void* _mallocAddress = (void*)0x04000000;
+    const ptrdiff_t _mallocSize = 32 * 1024 * 1024;
 };
 }  // namespace WamKern::Platform

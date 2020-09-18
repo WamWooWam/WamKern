@@ -1,6 +1,5 @@
 TARGET ?= powerpc
-test: SRC_DIRS ?= ./src
-powerpc: SRC_DIRS ?= ./src ./extern
+SRC_DIRS ?= ./src ./extern
 
 CC=clang
 CXX=clang++
@@ -13,14 +12,14 @@ INC_DIRS := ./inc ./extern
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 LDFLAGS := -nostdlib 
 
-powerpc: CPPFLAGS := $(INC_FLAGS) -Os -target powerpc-none-elf -march=powerpc -nostdlib -ffreestanding -DPOWERPC
-test: CPPFLAGS := $(INC_FLAGS) -DTEST -static 
+powerpc: CPPFLAGS := $(INC_FLAGS) -target powerpc-none-elf -march=powerpc -nostdlib -ffreestanding -DPOWERPC -g
+test: CPPFLAGS := $(INC_FLAGS) -DTEST -static -g
 
 CXXFLAGS ?= -std=c++17 -fno-rtti -fno-exceptions
 
 powerpc: $(OBJS)
 	mkdir -p bin
-	$(LD) $(LDFLAGS) -e main $(OBJS) --lto-O2 -o ./bin/boot.elf
+	$(LD) $(LDFLAGS) -e main $(OBJS) -o ./bin/boot.elf
 
 test: $(OBJS) 
 	mkdir -p bin 

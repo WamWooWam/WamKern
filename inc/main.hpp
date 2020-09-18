@@ -1,6 +1,6 @@
 #pragma once
 #include "kernel/kernel.hpp"
-#include "lib/alloc.h"
+#include "lib/memory.h"
 
 extern "C" {
 #ifdef TEST

@@ -482,7 +482,7 @@ extern "C" {
   of a program, using your regular system malloc elsewhere.
 */
 
-/* #define USE_DL_PREFIX */
+#define USE_DL_PREFIX
 
 
 /*

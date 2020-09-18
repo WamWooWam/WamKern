@@ -302,7 +302,7 @@
 #ifdef TEST
 #include <stdlib.h> /* For malloc(3). */
 #else
-#include "lib/alloc.h"
+#include "lib/memory.h"
 #endif
 #endif              /* HAVE_STDLIB_H */
 #ifdef VA_COPY

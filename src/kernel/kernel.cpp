@@ -2,7 +2,8 @@
 
 #include <stdint.h>
 
-#include "lib/alloc.h"
+#include "lib/memory.h"
+#include "lib/std.h"
 #include "lib/string.h"
 #include "platform/openfirmware.hpp"
 #include "platform/testplatform.hpp"
@@ -15,11 +16,27 @@ Platform::BasePlatform* Kernel::_platform;
 
 [[noreturn]] void Kernel::Run(void* data) {
 #ifdef TEST
-    _platform = new TestPlatform{data};
+    TestPlatform platform{data};
+    _platform = new TestPlatform(std::move(platform));
 #else
-    _platform = new OpenFirmwarePlatform{data};
+    OpenFirmwarePlatform platform{data};
+    _platform = new OpenFirmwarePlatform(std::move(platform));
 #endif
-    KernelLog("WamKern 1.0.0 compiled with clang %s on %s at %s",  __clang_version__, __DATE__, __TIME__);
+    KernelLogF("WamKern 1.0.0 compiled with clang %son %s at %s", __clang_version__, __DATE__, __TIME__);
+    KernelLogF("Memory allocation starting at 0x%x, stack at 0x%x", Memory::GetBaseAddress(), &StackBase);
+
+    uint8_t* allocTest = Memory::Allocate<uint8_t>(1024 * 1024);
+    if (allocTest == nullptr)
+        Panic("Failed to allocate memory!!");
+
+    KernelLogF("Allocated 1M at 0x%x", allocTest);
+
+    memset(allocTest, 0, 1024 * 1024);
+
+    KernelLogF("0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x", allocTest[0], allocTest[1], allocTest[2], allocTest[3], allocTest[4], allocTest[5], allocTest[6], allocTest[7]);
+    KernelLog("Exiting to host.");
+
+    delete[] allocTest;
 
     _platform->Exit();
 }
@@ -45,13 +62,11 @@ void Kernel::Log(const char* file, const char* func, int lineNum, const char* me
     messageLength = vasprintf(&message, messageFormat, arg);
     va_end(arg);
 
-    logStringLength = asprintf(&logString, "[%s:%i] %s: ", file, lineNum, func);
+    logStringLength = asprintf(&logString, "\033[31m[%s:%i]::%s:\033[0m %s\r\n", file, lineNum, func, message);
     _platform->WriteToConsole((const char*)logString, logStringLength);
-    _platform->WriteToConsole((const char*)message, messageLength);
-    _platform->WriteToConsole("\r\n");
 
-    free(message);
-    free(logString);
+    Memory::Free(message);
+    Memory::Free(logString);
 }
 
 }  // namespace WamKern

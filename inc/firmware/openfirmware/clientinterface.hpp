@@ -178,6 +178,8 @@ class ClientInterface {
 
     Cell Write(Cell ihandle, void *addr, long length);
 
+    Cell Claim(Cell virtualAddress, Cell size, Cell alignment);
+
     // static void Enter();
     [[noreturn]] void Exit();
     // static void Quiesce();
