@@ -3,5 +3,9 @@
 #include "lib/alloc.h"
 
 extern "C" {
-int main(void * unused1, void * unused2, void* ofInterface);
+#ifdef TEST
+int main();
+#else
+int main(void* unused1, void* unused2, void* ofInterface);
+#endif
 }

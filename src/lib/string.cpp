@@ -1,7 +1,7 @@
 #include "lib/string.h"
 
 extern "C" {
-static long strlen(const char* str) {
+static size_t strlen(const char* str) {
     const char* temp;
     for (temp = str; *temp != '\0'; ++temp)
         ;  // loop
@@ -18,7 +18,7 @@ static char* strcpy(char* dest, const char* src) {
 }
 }
 
-long String::Length(const char* str) {
+size_t String::Length(const char* str) {
     return strlen(str);
 }
 

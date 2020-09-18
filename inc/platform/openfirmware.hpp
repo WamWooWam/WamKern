@@ -11,6 +11,7 @@ class OpenFirmwarePlatform : public BasePlatform {
     OpenFirmwarePlatform(const OpenFirmwarePlatform&) = delete;
 
     void WriteToConsole(const char* text);
+    void WriteToConsole(const char* text, size_t length);
     [[noreturn]] void Halt();
     [[noreturn]] void Exit();
 

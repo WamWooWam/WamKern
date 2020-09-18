@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#include <stddef.h>
 #include <dlmalloc/malloc.h>
 
 #ifdef __cplusplus
@@ -13,6 +14,8 @@ void operator delete[](void* ptr);
 
 extern "C" {
 #endif
+
+#define alloca(x) __builtin_alloca(x)
 
 void* memset(void* m, int32_t c, size_t count);
 void* memcpy(void* d, const void* s, size_t count);

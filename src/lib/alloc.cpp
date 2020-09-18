@@ -1,5 +1,7 @@
 #include "lib/alloc.h"
 
+#include "kernel/kernel.hpp"
+
 extern unsigned long end;
 
 void* operator new(size_t count) {
@@ -43,6 +45,7 @@ void* memmove(void* dest, const void* src, size_t count) {
     return dest;
 }
 
+#ifndef TEST
 void* sbrk(size_t inc) {
     if (currentPtr == nullptr) {
         currentPtr = &end;
@@ -51,6 +54,9 @@ void* sbrk(size_t inc) {
     void* ptr = currentPtr;
     currentPtr += inc;
 
+    KernelLog("currentPtr: %s", currentPtr);
+
     return ptr;
 }
+#endif
 }

@@ -1,5 +1,5 @@
-#include "platform/openfirmware.hpp"
 
+#include "platform/openfirmware.hpp"
 #include "lib/string.h"
 
 namespace WamKern::Platform {
@@ -25,6 +25,11 @@ OpenFirmwarePlatform::OpenFirmwarePlatform(void* clientInterfacePtr) {
 void OpenFirmwarePlatform::WriteToConsole(const char* text) {
     if (ClientInterface::IsValidHandle(_stdoutIH))
         _clientInterface.Write(_stdoutIH, (void*)text, String::Length(text));
+}
+
+void OpenFirmwarePlatform::WriteToConsole(const char* text, size_t length) {
+    if (ClientInterface::IsValidHandle(_stdoutIH))
+        _clientInterface.Write(_stdoutIH, (void*)text, length);
 }
 
 [[noreturn]] void OpenFirmwarePlatform::Halt() {

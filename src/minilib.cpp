@@ -5,4 +5,8 @@ extern "C" {
 void __cxa_pure_virtual() {
     WamKern::Kernel::Panic("Attempt to call pure virtual function!!");
 }
+
+int __geterrno() {
+    return 0;
+}
 }

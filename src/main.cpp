@@ -3,6 +3,11 @@
 using namespace WamKern;
 
 extern "C" {
+#ifdef TEST
+int main() {
+    Kernel::Run(nullptr);
+}
+#else
 int main(void *, void *, void *ofInterface) {
     long stackPtr = (long)Kernel::StackBase + sizeof(Kernel::StackBase) - 0x100;
     __asm__ volatile("mr 1, %0"
@@ -11,4 +16,5 @@ int main(void *, void *, void *ofInterface) {
 
     Kernel::Run(ofInterface);
 }
+#endif
 }
