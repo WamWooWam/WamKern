@@ -9,4 +9,9 @@ void __cxa_pure_virtual() {
 int __geterrno() {
     return 0;
 }
+
+int* __errno_location() {
+    return nullptr; // no threads yet anyway KEKW
+}
+
 }

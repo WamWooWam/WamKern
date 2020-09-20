@@ -1,11 +1,16 @@
 #pragma once
 #include <stddef.h>
 
+#include "graphics/driver.hpp"
+
 namespace WamKern::Platform {
-class BasePlatform {
+class Platform {
    public:
-    BasePlatform() = default;
-    BasePlatform(const BasePlatform&) = delete;
+    Platform() = default;
+    Platform(const Platform&) = delete;
+
+    virtual void InitMemory() = 0;
+    virtual Graphics::Driver* CreateGraphicsDriver() = 0;
 
     virtual void WriteToConsole(const char* text) = 0;
     virtual void WriteToConsole(const char* text, size_t length) = 0;

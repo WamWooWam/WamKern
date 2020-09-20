@@ -22,9 +22,6 @@ OpenFirmwarePlatform::OpenFirmwarePlatform(void* clientInterfacePtr) {
     _clientInterface.GetProp(_chosenPH, "mmu", (char*)&_mmuIH, sizeof _mmuIH);
     if (!ClientInterface::IsValidHandle(_mmuIH))
         Panic("Unable to aquire mmu instance handle!");
-
-    _clientInterface.Claim((Cell)_mallocAddress, _mallocSize, 0);
-    Memory::Init(_mallocAddress, _mallocSize);
 }
 
 OpenFirmwarePlatform::OpenFirmwarePlatform(const OpenFirmwarePlatform&& p) {
@@ -34,6 +31,15 @@ OpenFirmwarePlatform::OpenFirmwarePlatform(const OpenFirmwarePlatform&& p) {
     _stdinIH = p._stdinIH;
     _memIH = p._memIH;
     _mmuIH = p._mmuIH;
+}
+
+void OpenFirmwarePlatform::InitMemory() {
+    _clientInterface.Claim((Cell)_mallocAddress, _mallocSize, 0);
+    Memory::Init(_mallocAddress, _mallocSize);
+}
+
+Graphics::Driver* OpenFirmwarePlatform::CreateGraphicsDriver() {
+    return nullptr;
 }
 
 void OpenFirmwarePlatform::WriteToConsole(const char* text) {

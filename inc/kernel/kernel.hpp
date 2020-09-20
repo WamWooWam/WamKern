@@ -1,7 +1,7 @@
 #pragma once
 #include <stdarg.h>
 
-#include "platform/baseplatform.hpp"
+#include "platform/platform.hpp"
 
 #define KernelLog(format) WamKern::Kernel::Log(__BASE_FILE__, __func__, __LINE__, format)
 #define KernelLogF(format, ...) WamKern::Kernel::Log(__BASE_FILE__, __func__, __LINE__, format, __VA_ARGS__)
@@ -16,7 +16,7 @@ class Kernel {
     static void Log(const char* file, const char* func, int lineNum, const char* messageFormat, ...);
 
    private:
-    static Platform::BasePlatform* _platform;
+    static Platform::Platform* _platform;
 };
 
 

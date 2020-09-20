@@ -2,14 +2,19 @@
 #pragma once
 #include <stdint.h>
 
-#include "platform/baseplatform.hpp"
+#include "platform/platform.hpp"
 
 namespace WamKern::Platform {
-class TestPlatform : public BasePlatform {
+class TestPlatform : public Platform {
    public:
     TestPlatform(void*);
     TestPlatform(const TestPlatform&) = delete;
     TestPlatform(const TestPlatform&&) {
+    }
+
+    void InitMemory();
+    Graphics::Driver* CreateGraphicsDriver() {
+        return nullptr;
     }
 
     void WriteToConsole(const char* text);

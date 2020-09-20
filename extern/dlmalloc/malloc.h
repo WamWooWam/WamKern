@@ -26,7 +26,9 @@
 #define USE_DL_PREFIX
 #endif
 
-#define _ALLOCA_H 
+#ifndef _ALLOCA_H
+#define _ALLOCA_H
+#endif 
 
 #ifndef MALLOC_270_H
 #define MALLOC_270_H
