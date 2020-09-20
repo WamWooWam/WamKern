@@ -1,12 +1,12 @@
 #ifdef TEST
-#include "platform/testplatform.hpp"
+#include "platform/test/testplatform.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "lib/memory.h"
 
-namespace WamKern::Platform {
+namespace WamKern::Platform::Test {
 uint8_t* TestPlatform::testHeap = nullptr;
 
 TestPlatform::TestPlatform(void* data) {
@@ -33,5 +33,4 @@ void TestPlatform::WriteToConsole(const char* text, size_t length) {
     exit(0);
 }
 }  // namespace WamKern::Platform
-
 #endif

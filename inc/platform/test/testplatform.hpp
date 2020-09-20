@@ -1,10 +1,9 @@
-#ifdef TEST
 #pragma once
 #include <stdint.h>
 
 #include "platform/platform.hpp"
 
-namespace WamKern::Platform {
+namespace WamKern::Platform::Test {
 class TestPlatform : public Platform {
    public:
     TestPlatform(void*);
@@ -26,4 +25,3 @@ class TestPlatform : public Platform {
     static uint8_t* testHeap;
 };
 }  // namespace WamKern::Platform
-#endif

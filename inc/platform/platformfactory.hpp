@@ -4,11 +4,11 @@
 #include "platform/platform.hpp"
 
 #ifdef TEST
-#include "platform/testplatform.hpp"
-#define PLATFORM TestPlatform
+#include "platform/test/testplatform.hpp"
+#define PLATFORM Test::TestPlatform
 #elif POWERPC
-#include "platform/openfirmware.hpp"
-#define PLATFORM OpenFirmwarePlatform
+#include "platform/openfirmware/ofplatform.hpp"
+#define PLATFORM OpenFirmware::OFPlatform
 #else
 #error No supported platform available
 #endif

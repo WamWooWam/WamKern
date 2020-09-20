@@ -1,7 +1,7 @@
-#include "firmware/openfirmware/clientinterface.hpp"
+#include "platform/openfirmware/clientinterface.hpp"
 
 
-namespace WamKern::Firmware::OpenFirmware {
+namespace WamKern::Platform::OpenFirmware {
 #define CLEAN_CALL(args) if (Call(args) != 0) return Error
 
 ClientInterface::ClientInterface(void* interface) {

@@ -1,15 +1,13 @@
 #pragma once
-#include "firmware/openfirmware/clientinterface.hpp"
+#include "platform/openfirmware/clientinterface.hpp"
 #include "platform/platform.hpp"
 
-using namespace WamKern::Firmware::OpenFirmware;
-
-namespace WamKern::Platform {
-class OpenFirmwarePlatform : public Platform {
+namespace WamKern::Platform::OpenFirmware {
+class OFPlatform : public Platform {
    public:
-    OpenFirmwarePlatform(void* clientInterfacePtr);
-    OpenFirmwarePlatform(const OpenFirmwarePlatform&) = delete;
-    OpenFirmwarePlatform(const OpenFirmwarePlatform&&);
+    OFPlatform(void* clientInterfacePtr);
+    OFPlatform(const OFPlatform&) = delete;
+    OFPlatform(const OFPlatform&&);
 
     void InitMemory();
     Graphics::Driver* CreateGraphicsDriver();

@@ -1,11 +1,11 @@
-
-#include "platform/openfirmware.hpp"
+#ifdef POWERPC
+#include "platform/openfirmware/ofplatform.hpp"
 
 #include "lib/memory.h"
 #include "lib/string.h"
 
-namespace WamKern::Platform {
-OpenFirmwarePlatform::OpenFirmwarePlatform(void* clientInterfacePtr) {
+namespace WamKern::Platform::OpenFirmware {
+OFPlatform::OFPlatform(void* clientInterfacePtr) {
     _clientInterface = ClientInterface(clientInterfacePtr);
 
     // aquire the /chosen device
@@ -24,7 +24,7 @@ OpenFirmwarePlatform::OpenFirmwarePlatform(void* clientInterfacePtr) {
         Panic("Unable to aquire mmu instance handle!");
 }
 
-OpenFirmwarePlatform::OpenFirmwarePlatform(const OpenFirmwarePlatform&& p) {
+OFPlatform::OFPlatform(const OFPlatform&& p) {
     _clientInterface = p._clientInterface;
     _chosenPH = p._chosenPH;
     _stdoutIH = p._stdoutIH;
@@ -33,30 +33,31 @@ OpenFirmwarePlatform::OpenFirmwarePlatform(const OpenFirmwarePlatform&& p) {
     _mmuIH = p._mmuIH;
 }
 
-void OpenFirmwarePlatform::InitMemory() {
+void OFPlatform::InitMemory() {
     _clientInterface.Claim((Cell)_mallocAddress, _mallocSize, 0);
     Memory::Init(_mallocAddress, _mallocSize);
 }
 
-Graphics::Driver* OpenFirmwarePlatform::CreateGraphicsDriver() {
+Graphics::Driver* OFPlatform::CreateGraphicsDriver() {
     return nullptr;
 }
 
-void OpenFirmwarePlatform::WriteToConsole(const char* text) {
+void OFPlatform::WriteToConsole(const char* text) {
     if (ClientInterface::IsValidHandle(_stdoutIH))
         _clientInterface.Write(_stdoutIH, (void*)text, String::Length(text));
 }
 
-void OpenFirmwarePlatform::WriteToConsole(const char* text, size_t length) {
+void OFPlatform::WriteToConsole(const char* text, size_t length) {
     if (ClientInterface::IsValidHandle(_stdoutIH))
         _clientInterface.Write(_stdoutIH, (void*)text, length);
 }
 
-[[noreturn]] void OpenFirmwarePlatform::Halt() {
+[[noreturn]] void OFPlatform::Halt() {
     __builtin_trap();
 }
 
-[[noreturn]] void OpenFirmwarePlatform::Exit() {
+[[noreturn]] void OFPlatform::Exit() {
     _clientInterface.Exit();
 }
 }  // namespace WamKern::Platform
+#endif

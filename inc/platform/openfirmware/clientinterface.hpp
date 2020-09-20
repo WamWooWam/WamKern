@@ -1,7 +1,7 @@
 #pragma once
 
 // based on ci.h from BootX
-namespace WamKern::Firmware::OpenFirmware {
+namespace WamKern::Platform::OpenFirmware {
 typedef long Cell;
 
 class ClientInterface {
