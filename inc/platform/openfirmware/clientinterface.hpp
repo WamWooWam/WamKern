@@ -98,9 +98,9 @@ class ClientInterface {
                 Cell parentPhandle;  // RETURN value
             } parent;
 
-            struct {            // nArgs=1, nReturns=1	( devSpec -- phandle )
+            struct {                  // nArgs=1, nReturns=1	( devSpec -- phandle )
                 const char *devSpec;  // IN parameter
-                Cell phandle;   // RETURN value
+                Cell phandle;         // RETURN value
             } finddevice;
 
             struct {           // nArgs=3, nReturns=1 ( ihandle buf buflen -- length )
@@ -165,6 +165,9 @@ class ClientInterface {
 
     ClientInterface() = default;
     ClientInterface(void *interface);
+    ClientInterface(ClientInterface &interface) {
+        this->delegate = interface.delegate;
+    }
 
     long Call(Args *ciArgs);
 
@@ -172,13 +175,17 @@ class ClientInterface {
     Cell Child(Cell phandle);
     Cell Parent(Cell phandle);
     Cell FindDevice(const char *devSpec);
+    Cell FindNode(Cell ph, long top, const char *prop, const char *value);
 
-    Cell GetProp(Cell handle, const char *name, void *buff, long buflen);
+    Cell GetProp(Cell handle, const char *name, void *buff, long bufflen);
     Cell InstanceToPackage(Cell iHandle);
+    Cell PackageToPath(Cell phandle, char *buff, long bufflen);
 
+    Cell Open(char* devSpec);
     Cell Write(Cell ihandle, void *addr, long length);
 
     Cell Claim(Cell virtualAddress, Cell size, Cell alignment);
+    Cell Interpret(Cell args, Cell rets, const char *forth, ...);
 
     // static void Enter();
     [[noreturn]] void Exit();
@@ -188,4 +195,4 @@ class ClientInterface {
     Delegate delegate = nullptr;
 };
 
-}  // namespace WamKern::Firmware::OpenFirmware
+}  // namespace WamKern::Platform::OpenFirmware

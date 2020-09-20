@@ -10,9 +10,9 @@ class Platform {
     Platform(const Platform&) = delete;
 
     virtual void InitMemory() = 0;
-    virtual Graphics::Driver* CreateGraphicsDriver() = 0;
+    virtual Graphics::GraphicsDriver* CreateGraphicsDriver() = 0;
 
-    virtual void WriteToConsole(const char* text) = 0;
+    virtual void WriteToConsole(const char* text);
     virtual void WriteToConsole(const char* text, size_t length) = 0;
 
     [[noreturn]] virtual void Panic(const char* msg);

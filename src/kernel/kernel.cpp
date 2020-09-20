@@ -2,9 +2,10 @@
 
 #include <stdint.h>
 
+#include "graphics/display.hpp"
+#include "graphics/driver.hpp"
 #include "lib/endian.h"
 #include "lib/memory.h"
-#include "lib/std.h"
 #include "lib/string.h"
 #include "platform/platformfactory.hpp"
 
@@ -12,7 +13,7 @@ using namespace WamKern::Platform;
 
 namespace WamKern {
 char Kernel::StackBase[0x8000];
-Platform::Platform* Kernel::_platform;
+Platform::Platform* Kernel::_platform = nullptr;
 
 [[noreturn]] void Kernel::Run(void* data) {
     _platform = PlatformFactory::CreateDefaultPlatform(data);
@@ -24,14 +25,13 @@ Platform::Platform* Kernel::_platform;
                (uintptr_t)Memory::TopAddress() - (uintptr_t)Memory::BaseAddress(),
                &StackBase);
 
-    uint8_t* allocTest = Memory::Allocate<uint8_t>(1 * 1024 * 1024);
-    if (allocTest == nullptr)
-        Panic("Failed to allocate memory!!");
+    auto graphicsDriver = _platform->CreateGraphicsDriver();
+    if (graphicsDriver->Initialise()) {
+        //auto displays = Memory::Allocate<Graphics::Display>(Graphics::GraphicsDriver::MaxDisplays);
+        auto displayCount = graphicsDriver->DisplayCount();
 
-    KernelLogF("Allocated 1M at 0x%x", Endian::Swap((uintptr_t)allocTest));
-    KernelLogF("0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x", allocTest[0], allocTest[1], allocTest[2], allocTest[3], allocTest[4], allocTest[5], allocTest[6], allocTest[7]);
-    Memory::Free(allocTest);
-    KernelLog("Exiting to host.");
+        KernelLogF("Got %d displays", displayCount);
+    }
 
     _platform->Exit();
 }

@@ -59,6 +59,17 @@ void* memmove(void* dest, const void* src, size_t count) {
     return WamKern::Memory::Move((const uint8_t*)src, (uint8_t*)dest, count);
 }
 
+void* memchr(void* ptr, int value, size_t count) {
+    uint8_t* p = (uint8_t*)ptr;
+    uint8_t i = (uint8_t)i;
+
+    for (size_t x = 0; x < count; x++) {
+        if (p[x] == i) return p + x;
+    }
+
+    return 0;
+}
+
 void* sbrk(size_t inc) {
     return WamKern::Memory::Increment(inc);
 }

@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 #ifdef __cplusplus
-#include "kernel/kernel.hpp"
+#include "kernel/kernellog.hpp"
 
 namespace WamKern {
 
@@ -26,7 +26,7 @@ class Memory {
 
     template <typename T>
     static inline T* Allocate(size_t count, bool clear = true) {
-        KernelLogF("Allocating %d bytes", count * sizeof(T));
+        //KernelLogF("Allocating %d bytes", count * sizeof(T));
 
 #ifdef TEST
         return clear ? (T*)dlcalloc(count, sizeof(T)) : (T*)dlmalloc(count * sizeof(T));
@@ -63,7 +63,7 @@ class Memory {
     }
 
     static void Free(void* ptr) {
-        KernelLogF("Freeing ptr 0x%x", ptr);
+        //KernelLogF("Freeing ptr 0x%x", ptr);
 
 #ifdef TEST
         return dlfree(ptr);
@@ -77,6 +77,7 @@ class Memory {
     static const void* maxAddress;
     static void* currentPtr;
 };
+
 }  // namespace WamKern
 
 void* operator new(size_t count);
@@ -94,7 +95,9 @@ extern "C" {
 void* memset(void* m, int32_t c, size_t count);
 void* memcpy(void* d, const void* s, size_t count);
 void* memmove(void* d, const void* s, size_t n);
+void* memchr(void* ptr, int value, size_t count);
 void* sbrk(size_t inc);
+
 
 #ifdef __cplusplus
 }

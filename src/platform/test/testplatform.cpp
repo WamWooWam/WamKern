@@ -17,10 +17,6 @@ void TestPlatform::InitMemory() {
     Memory::Init(testHeap, 32 * 1024 * 1024);
 }
 
-void TestPlatform::WriteToConsole(const char* text) {
-    printf("%s", text);
-}
-
 void TestPlatform::WriteToConsole(const char* text, size_t length) {
     printf("%s", text);
 }

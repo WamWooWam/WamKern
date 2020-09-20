@@ -1,4 +1,5 @@
 #include "platform/platform.hpp"
+#include "lib/string.h"
 
 namespace WamKern::Platform {
 [[noreturn]] void Platform::Panic(const char* msg) {
@@ -7,5 +8,9 @@ namespace WamKern::Platform {
     WriteToConsole("\r\nSYSTEM HALTED.");
 
     Halt();
+}
+
+void Platform::WriteToConsole(const char* msg) {
+    WriteToConsole(msg, String::Length(msg));
 }
 }

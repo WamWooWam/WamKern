@@ -12,11 +12,10 @@ class TestPlatform : public Platform {
     }
 
     void InitMemory();
-    Graphics::Driver* CreateGraphicsDriver() {
+    Graphics::GraphicsDriver* CreateGraphicsDriver() {
         return nullptr;
     }
-
-    void WriteToConsole(const char* text);
+    
     void WriteToConsole(const char* text, size_t length);
     [[noreturn]] void Halt();
     [[noreturn]] void Exit();

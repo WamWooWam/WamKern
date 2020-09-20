@@ -10,9 +10,8 @@ class OFPlatform : public Platform {
     OFPlatform(const OFPlatform&&);
 
     void InitMemory();
-    Graphics::Driver* CreateGraphicsDriver();
-
-    void WriteToConsole(const char* text);
+    Graphics::GraphicsDriver* CreateGraphicsDriver();
+    
     void WriteToConsole(const char* text, size_t length);
     [[noreturn]] void Halt();
     [[noreturn]] void Exit();
@@ -21,6 +20,8 @@ class OFPlatform : public Platform {
     ClientInterface _clientInterface;
     Cell _chosenPH = 0;
 
+    // stdout package handle
+    Cell _stdoutPH = 0;
     // stdout instance handle
     Cell _stdoutIH = 0;
     // stdin instance handle

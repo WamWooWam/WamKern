@@ -1,6 +1,7 @@
 #include "platform/platformfactory.hpp"
 
-#include "lib/std.h"
+#include <utility>
+
 namespace WamKern::Platform {
 Platform* PlatformFactory::CreateDefaultPlatform(void* data) {
     CurrentPlatform platform{data};
