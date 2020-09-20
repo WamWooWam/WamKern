@@ -15,7 +15,10 @@ class OFDisplay : public Graphics::Display {
     friend class OFGraphicsDriver;
 
    public:
-    OFDisplay();
+    OFDisplay(size_t width, size_t height, uint8_t bitDepth, size_t stride, uintptr_t frontBuffer, Cell screenPH, Cell screenIH)
+        : Display(width, height, bitDepth, stride, frontBuffer), _screenPH(screenPH), _screenIH(screenIH) {
+            
+    }
 
     OFDisplay& operator=(const OFDisplay& other) {
         _width = other._width;
@@ -24,19 +27,15 @@ class OFDisplay : public Graphics::Display {
         _stride = other._stride;
         _screenPH = other._screenPH;
         _screenIH = other._screenIH;
-        _address = other._address;
-
+        _frontBuffer = other._frontBuffer;
+        _backBuffer = other._backBuffer;
+        _bufferSize = other._bufferSize;
         return *this;
-    }
-
-    const inline void* FrameBuffer() {
-        return (void*)_address;
     }
 
    private:
     Cell _screenPH = 0;
     Cell _screenIH = 0;
-    uintptr_t _address = 0;
 };
 
 class OFGraphicsDriver : public Graphics::GraphicsDriver {

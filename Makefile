@@ -12,7 +12,7 @@ INC_DIRS := ./inc ./extern
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 LDFLAGS := -nostdlib 
 
-powerpc: CPPFLAGS := $(INC_FLAGS) -target powerpc-none-elf -march=powerpc -mtune=g4 -O3 -nostdlib -ffreestanding -DPOWERPC -DBIG_ENDIAN -I/usr/powerpc-linux-gnu/include/
+powerpc: CPPFLAGS := $(INC_FLAGS) -target powerpc-none-elf -march=powerpc -mtune=g4 -O2 -nostdlib -ffreestanding -DPOWERPC -DBIG_ENDIAN -I/usr/powerpc-linux-gnu/include/
 test: CPPFLAGS := $(INC_FLAGS) -DTEST -static -g -DLITTLE_ENDIAN -I/usr/x86_64-linux-gnu/include/
 
 CXXFLAGS ?= -std=c++17 -fno-rtti -fno-exceptions

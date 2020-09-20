@@ -6,6 +6,7 @@
 #include "graphics/driver.hpp"
 #include "lib/endian.h"
 #include "lib/memory.h"
+#include "lib/random.h"
 #include "lib/string.h"
 #include "platform/platformfactory.hpp"
 
@@ -27,12 +28,23 @@ Platform::Platform* Kernel::_platform = nullptr;
 
     auto graphicsDriver = _platform->CreateGraphicsDriver();
     if (graphicsDriver->Initialise()) {
-        //auto displays = Memory::Allocate<Graphics::Display>(Graphics::GraphicsDriver::MaxDisplays);
         auto displayCount = graphicsDriver->DisplayCount();
+        auto display = graphicsDriver->GetDisplay(0);
 
-        KernelLogF("Got %d displays", displayCount);
+        while (true) {
+            display->Clear(0);
+            for (size_t i = 0; i < 32; i++) {
+                display->FillRect(Random::Range<uint16_t>(0, display->Width()), Random::Range<uint16_t>(0, display->Height()), 20, 20, Random::Range<uint8_t>(0, 255));
+            }
+            display->Present();
+        }
+
+    } else {
+        KernelLog("Failed to initialise displays!");
     }
 
+    for (;;) {
+    }
     _platform->Exit();
 }
 

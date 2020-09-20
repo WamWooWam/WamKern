@@ -113,27 +113,21 @@ bool OFGraphicsDriver::InitDisplay(size_t index) {
     if (screenIH == 0)
         return false;
 
-    Cell x = 0;
-    OFDisplay display{};
-    display._screenPH = screenPH;
-    display._screenIH = screenIH;
+    Cell address = 0;
+    Cell width = 0;
+    Cell height = 0;
+    Cell depth = 0;
+    Cell linebytes = 0;
 
-    _clientInterface.GetProp(screenPH, "address", &x, sizeof x);
-    display._address = x;
+    _clientInterface.GetProp(screenPH, "address", &address, sizeof address);
+    _clientInterface.GetProp(screenPH, "width", &width, sizeof width);
+    _clientInterface.GetProp(screenPH, "height", &height, sizeof height);
+    _clientInterface.GetProp(screenPH, "depth", &depth, sizeof depth);
+    _clientInterface.GetProp(screenPH, "linebytes", &linebytes,  sizeof linebytes);
 
-    _clientInterface.GetProp(screenPH, "width", &x, sizeof x);
-    display._width = x;
+    OFDisplay display{(size_t)width, (size_t)height, (uint8_t)depth, (size_t)linebytes, (uintptr_t)address, screenPH, screenIH};
 
-    _clientInterface.GetProp(screenPH, "height", &x, sizeof x);
-    display._height = x;
-
-    _clientInterface.GetProp(screenPH, "depth", &x, sizeof x);
-    display._bitDepth = x;
-
-    _clientInterface.GetProp(screenPH, "linebytes", &x, sizeof x);
-    display._stride = x;
-
-    KernelLogF("Display %d: w:%d h:%d bpp:%d stride:%d addr:0x%x", index, display._width, display._height, display._bitDepth, display._stride, display._address);
+    KernelLogF("Display %d: w:%d h:%d bpp:%d stride:%d addr:0x%x", index, display._width, display._height, display._bitDepth, display._stride, display._frontBuffer);
     _displays[_displayCount] = display;
 
     return true;
@@ -153,6 +147,6 @@ Graphics::Display* OFGraphicsDriver::GetDisplay(size_t index) {
 }
 
 size_t OFGraphicsDriver::DisplayCount() {
-    return _displayInfoCount;
+    return _displayCount;
 }
 }  // namespace WamKern::Platform::OpenFirmware
